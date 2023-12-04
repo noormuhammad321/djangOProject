@@ -1,0 +1,26 @@
+<!-- object_detection/templates/object_detection/object_detection.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Object Detection</title>
+</head>
+<body>
+    <h1>Object Detection</h1>
+    <!-- Display object detection results here -->
+       <!-- Upload image form -->
+       <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Upload Image</button>
+    </form>
+        
+        {% if Image %}
+        <h3>Succesfully uploaded :IMAGE</h3>
+        <img src="{{ Image.image.url}}" alt="image" class="img-thumbnail" >
+        <p>Detected Objects: {{response}}</p>
+        {% endif %}
+    <a href="{% url 'home' %}">Back to Home</a>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!-- object_detection/templates/object_detection/fine_tune_model.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fine-Tune Model</title>
+</head>
+<body>
+    <h1>Fine-Tune Model</h1>
+    <form method="post" action="{% url 'fine_tune_model' %}">
+        {% csrf_token %}
+        <label for="api_key">Dataset API Key:</label>
+        <input type="phone2numeric" name="api_key" required>
+        <br>
+        <!-- Add other form fields as needed -->
+        <br>
+        <label for="Version">Dataset Version Number:</label>
+        <input type="phone2numeric" name="Version" required>
+        <br>
+        
+        <input type="submit" value="Fine-Tune Model">
+    </form>
+    <p>{{ message }}</p>
+    <a href="{% url 'home' %}">Back to Home</a>
+</body>
+</html>
