@@ -21,7 +21,7 @@ model = project.version(13).model
 # infer on an image hosted elsewhere
 # print(model.predict("URL_OF_YOUR_IMAGE", hosted=True, confidence=40, overlap=30).json())
 from .forms import YourModelForm
-from .models import YourModel
+
 def home(request):
     return render(request, 'home.html')
 
@@ -33,10 +33,44 @@ def object_detection(request):
             image=form.save()
             model.predict(image.image.path, confidence=40, overlap=30).save(image.image.path)
             res=model.predict(image.image.path, confidence=40, overlap=30).json()
-            print("HELLPOOO")
-            os.system("cd")
-            url=""
-            requests.post(url, data = res)
+            boxCode=0
+            shelveCode=0
+            box=0
+
+            for i in res["predictions"]:
+                print(i)
+                if i["class"]=="box":
+                    box+=1
+                    
+                if i["class"]=="boxCode":
+                    boxCode+=1
+                if i["class"]=="shelveCode":
+                    shelveCode+=1
+            import json
+            from requests.structures import CaseInsensitiveDict
+            # Info='''
+            # {
+            #     "box":box,
+            #     "boxCode":boxCode,
+            #     "shelveCode":shelveCode
+            # }
+            # '''
+            data=json.dumps({
+                "box":box,
+                "boxCode":boxCode,
+                "shelveCode":shelveCode
+            })
+            print(data)
+            headers = CaseInsensitiveDict()
+            headers["Accept"] = "application/json"
+            headers["Authorization"] = "Bearer {token}"
+            headers["Content-Type"] = "application/json"
+
+            inf=requests.post("https://ai.3plnext.com/CreateLogData",data=data,headers=headers)
+            print(inf,"JESDASIDSAIDJISA")
+
+            
+
             return render(request,"object_detection.html",{"Image":image,"response":res})  # Redirect to a success page
     else:
         form = YourModelForm()
